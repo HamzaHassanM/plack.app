@@ -53,6 +53,11 @@ final readonly class WorkspaceController
 
         $updateWorkspace->handle($workspace, $name);
 
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Workspace updated.'),
+        ]);
+
         return back();
     }
 }

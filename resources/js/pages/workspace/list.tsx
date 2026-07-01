@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import CreateWorkspaceDialog from '@/components/create-workspace-dialog';
+import EditWorkspaceDialog from '@/components/edit-workspace-dialog';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -59,11 +60,13 @@ export default function WorkspaceList({
                         {workspaces.data.map((workspace) => (
                             <li
                                 key={workspace.id}
-                                className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                                className="flex items-center justify-between rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                             >
                                 <span className="font-medium">
                                     {workspace.name}
                                 </span>
+
+                                <EditWorkspaceDialog workspace={workspace} />
                             </li>
                         ))}
                     </ul>
