@@ -1,7 +1,8 @@
 import { router } from '@inertiajs/react';
-import { MessageSquare, Plus, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useRef, useState } from 'react';
 import DirectMessageController from '@/actions/App/Http/Controllers/DirectMessageController';
+import { search as searchUsers } from '@/routes/user';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -44,7 +45,7 @@ export default function StartConversationDialog() {
 
         timerRef.current = setTimeout(async () => {
             try {
-                const res = await fetch(`/users/search?q=${encodeURIComponent(value)}`);
+                const res = await fetch(searchUsers.url({ query: { q: value } }));
                 const data = await res.json();
                 setResults(data);
             } catch {
