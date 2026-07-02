@@ -19,7 +19,7 @@ final class StoreDirectMessageRequest extends FormRequest
         return [
             'user_id' => [
                 'required',
-                'string',
+                'uuid',
                 Rule::exists(User::class, 'id'),
             ],
         ];

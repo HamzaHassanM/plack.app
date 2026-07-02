@@ -27,7 +27,7 @@ final class Conversation extends Model
     use HasUuids;
 
     /**
-     * @return BelongsToMany<User, $this>
+     * @return BelongsToMany<User, $this, ConversationUser, 'pivot'>
      */
     public function participants(): BelongsToMany
     {

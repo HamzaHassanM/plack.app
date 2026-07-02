@@ -17,13 +17,13 @@ it('searches users by name', function (): void {
 
 it('searches users by email', function (): void {
     $user = User::factory()->create(['email' => 'alice@example.com']);
-    User::factory()->create(['email' => 'bob@example.com']);
+    $bob = User::factory()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
 
     $this->actingAs($user)
         ->getJson(route('user.search', ['q' => 'bob']))
         ->assertStatus(200)
         ->assertJsonCount(1)
-        ->assertJsonFragment(['email' => 'bob@example.com']);
+        ->assertJsonFragment(['id' => $bob->id]);
 });
 
 it('excludes the current user from search results', function (): void {

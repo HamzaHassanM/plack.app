@@ -91,7 +91,7 @@ final class User extends Authenticatable
     }
 
     /**
-     * @return BelongsToMany<Conversation, $this>
+     * @return BelongsToMany<Conversation, $this, ConversationUser, 'pivot'>
      */
     public function conversations(): BelongsToMany
     {

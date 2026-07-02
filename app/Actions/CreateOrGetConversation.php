@@ -45,11 +45,11 @@ final readonly class CreateOrGetConversation
     }
 
     /**
-     * @return Collection<string>
+     * @return Collection<int, string>
      */
     private function participantIds(User $user): Collection
     {
-        /** @var Collection<string> $ids */
+        /** @var Collection<int, string> $ids */
         $ids = $user->conversations()->pluck('conversation_id');
 
         return $ids;

@@ -6,6 +6,7 @@ use App\Http\Controllers\AcceptWorkspaceInvitationController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\DeclineWorkspaceInvitationController;
 use App\Http\Controllers\DirectMessageController;
+use App\Http\Controllers\SendDirectMessageController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailResetNotificationController;
@@ -82,6 +83,23 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
     Route::delete('invitations/{invitation}', DeclineWorkspaceInvitationController::class)
         ->name('invitations.decline');
+
+    // Direct Messages...
+    Route::get('messages', [DirectMessageController::class, 'index'])
+        ->name('direct-message.index');
+
+    Route::post('messages', [DirectMessageController::class, 'store'])
+        ->name('direct-message.store');
+
+    Route::get('messages/{conversation}', [DirectMessageController::class, 'show'])
+        ->name('direct-message.show');
+
+    Route::post('messages/{conversation}/messages', SendDirectMessageController::class)
+        ->name('direct-message.message.store');
+
+    // User Search...
+    Route::get('users/search', UserSearchController::class)
+        ->name('user.search');
 });
 
 Route::middleware('auth')->group(function (): void {
@@ -150,21 +168,4 @@ Route::middleware('auth')->group(function (): void {
     // Session...
     Route::post('logout', [SessionController::class, 'destroy'])
         ->name('logout');
-
-    // Direct Messages...
-    Route::get('messages', [DirectMessageController::class, 'index'])
-        ->name('direct-message.index');
-
-    Route::post('messages', [DirectMessageController::class, 'store'])
-        ->name('direct-message.store');
-
-    Route::get('messages/{conversation}', [DirectMessageController::class, 'show'])
-        ->name('direct-message.show');
-
-    Route::post('messages/{conversation}/messages', [DirectMessageController::class, 'send'])
-        ->name('direct-message.message.store');
-
-    // User Search...
-    Route::get('users/search', UserSearchController::class)
-        ->name('user.search');
 });

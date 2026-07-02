@@ -28,7 +28,7 @@ final readonly class UserSearchController
                     ->orWhere('email', 'like', '%'.$query.'%');
             })
             ->limit(10)
-            ->get(['id', 'name', 'email']);
+            ->get(['id', 'name']);
 
         return response()->json($users);
     }

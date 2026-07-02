@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateOrGetConversation;
-use App\Actions\SendDirectMessage;
-use App\Http\Requests\StoreDirectMessageMessageRequest;
 use App\Http\Requests\StoreDirectMessageRequest;
 use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,8 +19,8 @@ final readonly class DirectMessageController
     public function index(#[CurrentUser] User $user): Response
     {
         $conversations = $user->conversations()
-            ->with(['participants' => fn (BelongsToMany $query) => $query->whereKeyNot($user->id)])
-            ->with('messages', fn (HasMany $query) => $query->latest()->limit(1))
+            ->with(['participants' => fn (Relation $query) => $query->whereKeyNot($user->id)])
+            ->with('messages', fn (Relation $query) => $query->latest()->limit(1))
             ->latest()
             ->paginate(20);
 
@@ -70,25 +67,5 @@ final readonly class DirectMessageController
             'messages' => $messages,
             'otherParticipant' => $otherParticipant,
         ]);
-    }
-
-    public function send(
-        StoreDirectMessageMessageRequest $request,
-        #[CurrentUser] User $user,
-        Conversation $conversation,
-        SendDirectMessage $sendDirectMessage,
-    ): RedirectResponse {
-        abort_unless($conversation->participants()->whereKey($user->id)->exists(), 404);
-
-        $body = $request->string('body')->value();
-
-        $sendDirectMessage->handle($conversation, $user, $body);
-
-        Inertia::flash('toast', [
-            'type' => 'success',
-            'message' => __('Message sent.'),
-        ]);
-
-        return back();
     }
 }
